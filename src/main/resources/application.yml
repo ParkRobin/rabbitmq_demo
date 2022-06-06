@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: rabbitmq_demo
+  mvc:
+    path-match:
+      matching-strategy: ant_path_matcher
+  rabbitmq:
+    host: localhost
+    post: 5672
+    username: changme
+    password: changme
+    virtual-host: /changme
+    exchange:
+      direct:
+        text: text.direct
+      fanout:
+        text: text.fanout
+      topic:
+        text: text.topic
+    queue:
+      text1: text1.queue
+      text2: text2.queue
+      text3: text3.queue
+
+server:
+  port:
+  servlet:
+    context-path: /rabbitmq
+

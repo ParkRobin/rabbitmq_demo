@@ -13,14 +13,21 @@ spring:
     exchange:
       direct:
         text: text.direct
+        employee: employee.direct
       fanout:
         text: text.fanout
+        employee: employee.fanout
       topic:
         text: text.topic
+        employee: employee.topic
     queue:
       text1: text1.queue
       text2: text2.queue
       text3: text3.queue
+      text4: text4.queue
+      employee1: employee1.queue
+      employee2: employee2.queue
+      employee3: employee3.queue
 
 server:
   port:

@@ -9,9 +9,9 @@ import java.io.Serializable;
 @Data
 public class Employee implements Serializable {
 
-    private int id;
+    private Integer id;
 
     private String name;
 
-    private int age;
+    private Integer age;
 }

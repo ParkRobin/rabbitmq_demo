@@ -7,9 +7,9 @@ spring:
   rabbitmq:
     host: localhost
     post: 5672
-    username: changme
-    password: changme
-    virtual-host: /changme
+    username: changeme
+    password: changeme
+    virtual-host: /changeme
     exchange:
       direct:
         text: text.direct

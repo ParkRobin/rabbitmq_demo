@@ -6,7 +6,7 @@ spring:
       matching-strategy: ant_path_matcher
   rabbitmq:
     host: localhost
-    post: 5672
+    port: 5672
     username: changeme
     password: changeme
     virtual-host: /changeme

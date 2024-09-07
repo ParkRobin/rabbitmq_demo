@@ -9,12 +9,18 @@ It can produce and consume messages through direct/fanout/topic exchanges.
 
 ```
 RabbitMQ: 3.10.5
-Java: 17
-Spring Boot: 2.7.0
+Java: 21
+Spring Boot: 3.3.3
 ```
 
-## 3. Swagger
+## 3. Run
 
 ```
-http://localhost:8080/rabbitmq/swagger-ui/#/
+ mvn spring-boot:run
+```
+
+## 4. Swagger
+
+```
+http://localhost:8080/rabbitmq/swagger-ui/index.html
 ```

@@ -22,6 +22,9 @@ public class TextProducer {
     @Autowired
     private Exchange textTopicExchange;
 
+    @Autowired
+    private Exchange textHeadersExchange;
+
     public boolean sendMessageToDefaultExchange(String queueName, String message){
         try{
             rabbitTemplate.convertAndSend("", queueName, message);
@@ -58,6 +61,19 @@ public class TextProducer {
             return true;
         }catch (Exception e){
             log.error("Send Message To Topic Exchange Error, routingKey: {}, message: {}", routingKey, message, e);
+            return false;
+        }
+    }
+
+    public boolean sendMessageToHeadersExchange(String message, int headerValue){
+        try{
+            rabbitTemplate.convertAndSend(textHeadersExchange.getName(), "", message, m -> {
+                m.getMessageProperties().getHeaders().put("header-test", headerValue);
+                return m;
+            });
+            return true;
+        }catch (Exception e){
+            log.error("Send Message To Headers Exchange Error, headerValue: {}, message: {}", headerValue, message, e);
             return false;
         }
     }

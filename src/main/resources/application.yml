@@ -9,7 +9,7 @@ spring:
     port: 5672
     username: changeme
     password: changeme
-    virtual-host: /changeme
+    virtual-host: changeme
     exchange:
       direct:
         text: text.direct
@@ -20,6 +20,9 @@ spring:
       topic:
         text: text.topic
         employee: employee.topic
+      headers:
+        text: text.headers
+        employee: employee.headers
     queue:
       text1: text1.queue
       text2: text2.queue

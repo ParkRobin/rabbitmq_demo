@@ -3,9 +3,13 @@ package com.robin.rabbitmq.config;
 import com.robin.rabbitmq.mq.consumers.EmployeeConsumer;
 import com.robin.rabbitmq.mq.consumers.TextConsumer;
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.support.converter.SimpleMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
+import java.util.Map;
 
 @Configuration
 public class RabbitMQConfig {
@@ -18,6 +22,9 @@ public class RabbitMQConfig {
 
     @Value("${spring.rabbitmq.exchange.topic.text}")
     private String textTopicExchangeName;
+
+    @Value("${spring.rabbitmq.exchange.headers.text}")
+    private String textHeadersExchangeName;
 
     @Value("${spring.rabbitmq.queue.text1}")
     private String textQueue1Name;
@@ -40,6 +47,9 @@ public class RabbitMQConfig {
     @Value("${spring.rabbitmq.exchange.topic.employee}")
     private String employeeTopicExchangeName;
 
+    @Value("${spring.rabbitmq.exchange.headers.employee}")
+    private String employeeHeadersExchangeName;
+
     @Value("${spring.rabbitmq.queue.employee1}")
     private String employeeQueue11Name;
 
@@ -48,6 +58,13 @@ public class RabbitMQConfig {
 
     @Value("${spring.rabbitmq.queue.employee3}")
     private String employeeQueue3Name;
+
+    @Bean
+    public SimpleMessageConverter converter() {
+        SimpleMessageConverter converter = new SimpleMessageConverter();
+        converter.setAllowedListPatterns(List.of("com.robin.rabbitmq.domains.*"));
+        return converter;
+    }
 
     /**
      * Exchange
@@ -68,6 +85,11 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public HeadersExchange textHeadersExchange() {
+        return new HeadersExchange(textHeadersExchangeName, false, true);
+    }
+
+    @Bean
     public DirectExchange employeeDirectExchange(){
         return new DirectExchange(employeeDirectExchangeName, false, true);
     }
@@ -82,6 +104,10 @@ public class RabbitMQConfig {
         return new TopicExchange(employeeTopicExchangeName, false, true);
     }
 
+    @Bean
+    public HeadersExchange employeeHeadersExchange() {
+        return new HeadersExchange(employeeHeadersExchangeName, false, true);
+    }
     /**
      * Queue
      */
@@ -183,6 +209,22 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(textQueue4).to(textTopicExchange).with("#");
     }
 
+    //Text Headers Exchange
+    @Bean
+    public Binding textQueue1ToTextHeadersExchange(HeadersExchange textHeadersExchange, Queue textQueue1){
+        return BindingBuilder.bind(textQueue1).to(textHeadersExchange).whereAny(Map.of("header-test", 123)).match();
+    }
+
+    @Bean
+    public Binding textQueue2ToTextHeadersExchange(HeadersExchange textHeadersExchange, Queue textQueue2){
+        return BindingBuilder.bind(textQueue2).to(textHeadersExchange).whereAny(Map.of("header-test", 456)).match();
+    }
+
+    @Bean
+    public Binding textQueue3ToTextHeadersExchange(HeadersExchange textHeadersExchange, Queue textQueue3){
+        return BindingBuilder.bind(textQueue3).to(textHeadersExchange).whereAny(Map.of("header-test", 789)).match();
+    }
+
     //Employee Direct Exchange
     @Bean
     public Binding employeeQueue1ToEmployeeDirectExchange(DirectExchange employeeDirectExchange, Queue employeeQueue1){
@@ -224,6 +266,22 @@ public class RabbitMQConfig {
     @Bean
     public Binding employeeQueue3ToEmployeeTopicExchange(TopicExchange employeeTopicExchange, Queue employeeQueue3){
         return BindingBuilder.bind(employeeQueue3).to(employeeTopicExchange).with("staff.*");
+    }
+
+    //Text Headers Exchange
+    @Bean
+    public Binding employeeQueue1ToEmployeeHeadersExchange(HeadersExchange employeeHeadersExchange, Queue employeeQueue1){
+        return BindingBuilder.bind(employeeQueue1).to(employeeHeadersExchange).whereAny(Map.of("header-test", 123)).match();
+    }
+
+    @Bean
+    public Binding employeeQueue2ToEmployeeHeadersExchange(HeadersExchange employeeHeadersExchange, Queue employeeQueue2){
+        return BindingBuilder.bind(employeeQueue2).to(employeeHeadersExchange).whereAny(Map.of("header-test", 456)).match();
+    }
+
+    @Bean
+    public Binding employeeQueue3ToEmployeeHeadersExchange(HeadersExchange employeeHeadersExchange, Queue employeeQueue3){
+        return BindingBuilder.bind(employeeQueue3).to(employeeHeadersExchange).whereAny(Map.of("header-test", 789)).match();
     }
 
     /**

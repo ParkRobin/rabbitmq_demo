@@ -23,6 +23,9 @@ public class EmployeeProducer {
     @Autowired
     private Exchange employeeTopicExchange;
 
+    @Autowired
+    private Exchange employeeHeadersExchange;
+
     public boolean sendMessageToDefaultExchange(String queueName, Employee message){
         try{
             rabbitTemplate.convertAndSend("", queueName, message);
@@ -59,6 +62,19 @@ public class EmployeeProducer {
             return true;
         }catch (Exception e){
             log.error("Send Message To Topic Exchange Error, routingKey: {}, message: {}", routingKey, message, e);
+            return false;
+        }
+    }
+
+    public boolean sendMessageToHeadersExchange(Employee message, int headerValue){
+        try{
+            rabbitTemplate.convertAndSend(employeeHeadersExchange.getName(), "", message, m -> {
+                m.getMessageProperties().getHeaders().put("header-test", headerValue);
+                return m;
+            });
+            return true;
+        }catch (Exception e){
+            log.error("Send Message To Headers Exchange Error, headerValue: {}, message: {}", headerValue, message, e);
             return false;
         }
     }

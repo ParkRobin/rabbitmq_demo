@@ -38,6 +38,11 @@ public class ProduceMessageController {
         return textProducer.sendMessageToTopicExchange(routingKey, text);
     }
 
+    @PostMapping("/text/headers")
+    public Boolean sendTextMessageToHeadersExchange(@RequestBody String text, @RequestParam int headerValue){
+        return textProducer.sendMessageToHeadersExchange(text, headerValue);
+    }
+
     @PostMapping("/employee/default")
     public Boolean sendEmployeeMessageToDefaultExchange(@RequestBody Employee employee, @RequestParam String queueName){
         return employeeProducer.sendMessageToDefaultExchange(queueName, employee);
@@ -56,5 +61,10 @@ public class ProduceMessageController {
     @PostMapping("/employee/topic")
     public Boolean sendEmployeeMessageToTopicExchange(@RequestBody Employee employee, @RequestParam String routingKey){
         return employeeProducer.sendMessageToTopicExchange(routingKey, employee);
+    }
+
+    @PostMapping("/employee/headers")
+    public Boolean sendEmployeeMessageToHeadersExchange(@RequestBody Employee employee, @RequestParam int headerValue){
+        return employeeProducer.sendMessageToHeadersExchange(employee, headerValue);
     }
 }
